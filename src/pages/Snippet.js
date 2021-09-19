@@ -8,13 +8,16 @@ import Spinner from '../spinner'
 import axios from 'axios';
 import { useHistory,useLocation } from 'react-router';
 import { deleteSnippet } from '../api';
+import Swal from 'sweetalert2';
 
 function Snippet() {
     const [snippetData, setSnippetData] = useState([]);
+    const [dataLoading, setDataLoading] = useState(true);
     const history = useHistory();
     const query = useQuery();
     useEffect(()=>{
         const fetch = async() =>{
+            setDataLoading(true);
             // for all
             let url = `https://recode-snippet.herokuapp.com/snippet/${localStorage.getItem('userid')}`
             // for specific tags
@@ -23,15 +26,24 @@ function Snippet() {
             }
             await axios.get(url)
             .then(res=>{
+                setDataLoading(false)
                 setSnippetData(res.data);
             })
             .catch(err=>{
+                setDataLoading(false);
                 console.log(err);
             })
         }
         fetch();
     },[query.get('search')]);
 
+    const copyToClipboard = (value) =>{
+        navigator.clipboard.writeText(value)
+        Swal.fire({
+            title : "Copied",
+            icon: "success"
+        })
+    }
     const editSnippet = (id) =>{
         return history.push(`/addcode?id=${id}`);
     }
@@ -45,9 +57,8 @@ function Snippet() {
 
             <ListGroup style={{marginTop:"15px"}} as="ul" variant="flush">
             <Accordion>
-                {
-                    snippetData?
-                    snippetData.map((value,index)=>(
+                {dataLoading?<Spinner/>:
+                    snippetData&&snippetData.map((value,index)=>(
                         <ListGroup.Item key={value._id}  style={{borderBottom:'4px solid grey'}}>   
                             <Accordion.Toggle as={Card.Header} 
                                 style={{cursor:"pointer",textAlign:"center",background:"transparent",border:0,fontWeight:"bold",color:"grey"}} 
@@ -66,7 +77,7 @@ function Snippet() {
                                     <div style={{display:'flex',justifyContent:"center"}}>
                                         <ButtonGroup size="sm" style={{marginTop:"10px",marginBottom:"10px"}}>
                                             <Button variant="secondary" className="rounded"
-                                                onClick={() =>{navigator.clipboard.writeText(value.snippet)}}>
+                                                onClick={() =>copyToClipboard(value.snippet)}>
                                                 <i className="fas fa-copy"></i> &nbsp;Copy
                                             </Button>&nbsp;&nbsp;&nbsp;
                                             <Button variant="success" className="rounded" onClick={()=>editSnippet(value._id)}>
@@ -81,7 +92,7 @@ function Snippet() {
                                 </>
                             </Accordion.Collapse>
                         </ListGroup.Item>
-                    )):<Spinner />
+                    ))
                 }
                 
             </Accordion>

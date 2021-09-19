@@ -1,4 +1,4 @@
-import { Row,Col, Container, ListGroup, ListGroupItem, Button } from 'react-bootstrap'
+import { Row,Col, Container, ListGroup, ListGroupItem } from 'react-bootstrap'
 import {useContext,useEffect,useState} from 'react'
 import { FirebaseContext } from '../firebase'   
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -37,7 +37,7 @@ function Profile() {
     },[]);
 
     return (<>
-        {profileLoading?<Spinner color="#9b59b6"/>:
+        {profileLoading?<Spinner color="#0f5132"/>:
         <Container fluid="sm" className="profile__container">
             <Row>
                 <Col sm={4} style={{display:'flex',justifyContent:"center",marginTop:"15px"}}>

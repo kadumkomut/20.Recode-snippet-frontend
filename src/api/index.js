@@ -31,7 +31,7 @@ export const deleteSnippet = (id,title,index,snippetData,setSnippetData) => {
 }
 
 export const updateSnippet = (title,codeAce,tags,languageValue,history,query,type) =>{
-    if(title==""||codeAce==""||tags==""||languageValue==""){
+    if(title===""||codeAce===""||tags===""||languageValue===""){
         Swal.fire({
             title:"Missing values",
             icon:"warning",
@@ -43,14 +43,14 @@ export const updateSnippet = (title,codeAce,tags,languageValue,history,query,typ
     let url = `https://recode-snippet.herokuapp.com/snippet/${query.get('id')}`;
     let method="PUT";
     // for submit
-    if(type=="submit"){
+    if(type==="submit"){
         url = 'https://recode-snippet.herokuapp.com/snippet';
         method = "POST"
     }
     Swal.fire({
-        title:type=="submit"?"Snippet Send":"Snipet Update",
+        title:type==="submit"?"Snippet Send":"Snipet Update",
         icon:"question",
-        text:type=="submit"?"Do you want to submit snippet?":"Do you want to update snippet",
+        text:type==="submit"?"Do you want to submit snippet?":"Do you want to update snippet",
         confirmButtonText:"confirm",
         confirmButtonColor:"green",  
         cancelButtonText:"cancel",

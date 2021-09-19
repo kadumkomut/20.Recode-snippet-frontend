@@ -1,5 +1,5 @@
-import {useState, useContext, useEffect } from 'react'
-import {Navbar, Nav, Container,NavDropdown, InputGroup,FormControl, Modal,Button, Badge  } from 'react-bootstrap'
+import {useState, useContext } from 'react'
+import {Navbar, Nav, Container,NavDropdown,  Modal  } from 'react-bootstrap'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { NavLink,useHistory } from 'react-router-dom';
 import { signOut } from '../authentication';
@@ -25,7 +25,7 @@ function Header() {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
-                    {user&&<Nav.Link  onClick={handleShow}>
+                    {user&&<Nav.Link  onClick={handleShow} disabled>
                         <i className="fas fa-search"></i> Search
                     </Nav.Link>}
                     {user&&<Nav.Link>
@@ -59,7 +59,7 @@ function Header() {
             </Container>
             {/* modal for search */}
             <>
-                <Modal show={show} onHide={handleClose}>
+                {/* <Modal show={show} onHide={handleClose}>
                 <Modal.Header >
                     <Modal.Title>Snippet Search</Modal.Title>
                 </Modal.Header>
@@ -73,7 +73,7 @@ function Header() {
                     <Button variant="secondary" size="sm" onClick={handleClose}>Close</Button>
                     <Button variant="primary" size="sm">Search</Button>
                 </Modal.Footer>
-                </Modal>
+                </Modal> */}
             </>
         </Navbar>
     )
