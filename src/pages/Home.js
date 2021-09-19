@@ -4,12 +4,13 @@ import '../styles/home.css'
 import {useAuthState} from 'react-firebase-hooks/auth'
 import { FirebaseContext } from '../firebase'
 import { useHistory } from 'react-router'
+import Spinner from '../spinner'
 
 function Home() {
     const firebase = useContext(FirebaseContext);
-    const [user] = useAuthState(firebase.auth);
+    const [user,loading] = useAuthState(firebase.auth);
     const history = useHistory();
-    return (
+    return (<>{loading?<Spinner />:
         <Container  className="home__container">
             <Alert variant="success">
                 <Alert.Heading>Hey, nice to see you</Alert.Heading> 
@@ -33,7 +34,7 @@ function Home() {
                         <Button className="home__linkedin" href="https://in.linkedin.com/in/kadum-komut-67023012b" target="_blank" ><i className="fab fa-linkedin"></i> </Button>
                 </ButtonGroup>
             </Alert>
-        </Container>
+        </Container>}</>
     )
 }
 
