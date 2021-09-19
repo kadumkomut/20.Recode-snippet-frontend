@@ -1,7 +1,7 @@
 import {useState, useContext, useEffect } from 'react'
 import {Navbar, Nav, Container,NavDropdown, InputGroup,FormControl, Modal,Button, Badge  } from 'react-bootstrap'
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { NavLink } from 'react-router-dom';
+import { NavLink,useHistory } from 'react-router-dom';
 import { signOut } from '../authentication';
 import { FirebaseContext } from '../firebase'
 import brain from '../images/brain.png'
@@ -10,6 +10,7 @@ import '../styles/header.css'
 function Header() {
     const firebase = useContext(FirebaseContext);
     const [user] = useAuthState(firebase.auth);
+    const history = useHistory();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -27,21 +28,24 @@ function Header() {
                     {user&&<Nav.Link  onClick={handleShow}>
                         <i className="fas fa-search"></i> Search
                     </Nav.Link>}
-                    <Nav.Link>
+                    {user&&<Nav.Link>
                         <NavLink  activeStyle={{color:"white"}} className="active" to="/snippet">
                             <i className="fas fa-code"></i> Snippet 
                         </NavLink>
-                    </Nav.Link>
-                    <Nav.Link>
+                    </Nav.Link>}
+                    {user&&<Nav.Link>
                         <NavLink  activeStyle={{color:"white"}} className="active" to="/addcode">
                            <i className="fas fa-plus-circle"></i> Add
                         </NavLink>
-                    </Nav.Link>
-                    {user&&<NavDropdown title="Options" drop="left"  id="navbarScrollingDropdown">
-                        <NavDropdown.Item onClick={()=>signOut(firebase)}>
+                    </Nav.Link>}
+                    <NavDropdown title="Options" drop="left"  id="navbarScrollingDropdown">
+                        {user&&<NavDropdown.Item onClick={()=>signOut(firebase)}>
                             {user&&<><i className="fas fa-sign-out-alt"></i> Logout</>}
-                        </NavDropdown.Item>
-                    </NavDropdown>}
+                        </NavDropdown.Item>}
+                        {!user&&<NavDropdown.Item onClick={()=>history.push('/signin')}>
+                            <i className="fas fa-sign-out-alt"></i> Login
+                        </NavDropdown.Item>}
+                    </NavDropdown>
                 </Nav>
                 <Nav>
                     <Nav.Link >
