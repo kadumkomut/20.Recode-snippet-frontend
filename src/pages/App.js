@@ -1,9 +1,7 @@
 import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
 import {Profile, SignIn, Snippet,ProtectedRoute,AddCode,Home} from './'
 import Header from '../utility/Header';
-
 function App() {
-  
   return (
     <Router>
       <Header />
@@ -14,6 +12,7 @@ function App() {
         <ProtectedRoute exact path="/addcode" component={AddCode}/>
         <Route exact path="/" component={Home} />
       </Switch>
+      {/* <Footer /> */}
     </Router>
   );
 }

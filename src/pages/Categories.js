@@ -1,18 +1,29 @@
 import {Card,Badge} from 'react-bootstrap'
 import {useState} from 'react';
-import { useHistory } from 'react-router';
+import axios from 'axios';
 
-function Categories() {
+function Categories({setSnippetData,setDataLoading}) {
     const [tagsList, setTagsList] = useState(
-        ['express','django','github','algorithm','datastructure','flask','styles','php','others']
+        ['express','django','github','algorithm','datastructure','flask','styles','php','others','react']
     )
-    const history = useHistory();
-    const searchTags = (tags) =>{
-        history.push(`/snippet?search=${tags}`);
+    const searchTags = async(tags) =>{
+        setDataLoading(true);
+        const url = `https://recode-snippet.herokuapp.com/snippet/${localStorage.getItem('userid')}/search/${tags}`
+        await axios.get(url)
+            .then(res=>{
+                setDataLoading(false)
+                setSnippetData(res.data);
+            })
+            .catch(err=>{
+                setDataLoading(false);
+                console.log(err);
+            })
     }
+
     return (
         <Card className="shadow-sm spinner__card__container">
                 <Card.Body>
+                    <span style={{color:"grey"}}>Search by tags : </span>&nbsp;
                     {
                     tagsList.map((value,index)=>(
                         <Badge onClick={()=>searchTags(value)} key={index} className="spinner__badge" >{value}</Badge>

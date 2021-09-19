@@ -17,7 +17,7 @@ function Profile() {
             await axios.get(`https://recode-snippet.herokuapp.com/profile/${localStorage.getItem('userid')}`)
             .then(res=>{
                 setProfieLoading(false);
-                if(res.data.message!='success'){
+                if(res.data.message!=='success'){
                     Swal.fire({
                         title: "Something went wrong",
                         icon: "error",
@@ -42,7 +42,7 @@ function Profile() {
             <Row>
                 <Col sm={4} style={{display:'flex',justifyContent:"center",marginTop:"15px"}}>
                     <div className="profile__card profile__background">
-                    <img src={profileData&&profileData.picture} style={{width:"150px",borderRadius:"50%"}}/><br/>
+                    <img src={profileData&&profileData.picture} alt={profileData&&profileData.name} style={{width:"150px",borderRadius:"50%"}}/><br/>
                     <h4>{user&&user.displayName}</h4>
                     <h5>{user&&user.title}</h5>
                     </div>

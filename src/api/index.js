@@ -75,7 +75,7 @@ export const updateSnippet = (title,codeAce,tags,languageValue,history,query,typ
         showLoaderOnConfirm:true,
         allowOutsideClick: () => !Swal.isLoading()
     }).then(res=>{
-        if(res.isConfirmed&&res.value.message=='success'){
+        if(res.isConfirmed&&res.value.message==='success'){
             Swal.fire({
                 title : "Snippet Saved Successfull",
                 icon: "success"

@@ -29,7 +29,7 @@ function AddCode() {
         ['javascript','java','html','gitignore','c_cpp','clojure','python','css','json','swift', 'elixir','erlang','kotlin']
     );
     const [tagsList, setTagsList] = useState(
-        ['express','django','github','algorithm','datastructure','flask','styles','php','others']
+        ['express','django','github','algorithm','datastructure','flask','styles','php','others','react']
     )  
     const history = useHistory();
     const query = useQuery();
@@ -107,15 +107,15 @@ function AddCode() {
                     mode={languageValue}
                     theme="monokai"
                     value={codeAce}
-                    width="100% "
+                    width="100%"
                     onChange={(value)=>setCodeAce(value)}
-                    fontSize={16}
+                    fontSize={16}   
                     showPrintMargin={true}
                     showGutter={true}
                     highlightActiveLine={true}
                     wrapEnabled={true}
                     setOptions={{
-                        enableBasicAutocompletion: true,
+                        enableBasicAutocompletion: false,
                         enableLiveAutocompletion: false,
                         enableSnippets: false,
                         showLineNumbers : true,
@@ -123,7 +123,7 @@ function AddCode() {
                     }}/>
                 
                 {
-                    editCode?<Button onClick={updateCode} variant="danger" style={{marginTop:"15px",float:"right"}}>
+                    editCode?<Button onClick={updateCode} variant="danger" style={{marginTop:"15px",marginBottom:"15px",float:"right"}}>
                         Update &nbsp;<i className="fas fa-caret-square-right"></i>
                     </Button>:
                     <Button onClick={submitCode} variant="danger" style={{marginTop:"15px",float:"right"}}>
