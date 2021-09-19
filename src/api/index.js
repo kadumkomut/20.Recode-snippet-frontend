@@ -44,7 +44,7 @@ export const updateSnippet = (title,codeAce,tags,languageValue,history,query,typ
     let method="PUT";
     // for submit
     if(type==="submit"){
-        url = 'https://recode-snippet.herokuapp.com/snippet';
+        url = 'http://localhost:5000/snippet';
         method = "POST"
     }
     Swal.fire({

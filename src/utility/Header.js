@@ -1,5 +1,6 @@
+import axios from 'axios';
 import {useState, useContext } from 'react'
-import {Navbar, Nav, Container,NavDropdown,  Modal  } from 'react-bootstrap'
+import {Navbar, Nav, Container,NavDropdown,  Modal,InputGroup,Button,FormControl  } from 'react-bootstrap'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { NavLink,useHistory } from 'react-router-dom';
 import { signOut } from '../authentication';
@@ -10,10 +11,17 @@ import '../styles/header.css'
 function Header() {
     const firebase = useContext(FirebaseContext);
     const [user] = useAuthState(firebase.auth);
+    const [searchValue, setSearchValue] = useState("");
     const history = useHistory();
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    
+
+    const searchSnippet = async() =>{
+        if(searchValue==="") return;
+        const res = await axios.post('http://localhost:5000/search',{
+            searchValue
+        })
+        console.log(res.data);
+    }
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" sticky="top" variant="dark">
             <Container>
@@ -25,9 +33,6 @@ function Header() {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="me-auto">
-                    {user&&<Nav.Link  onClick={handleShow} disabled>
-                        <i className="fas fa-search"></i> Search
-                    </Nav.Link>}
                     {user&&<Nav.Link>
                         <NavLink  activeStyle={{color:"white"}} className="active" to="/snippet">
                             <i className="fas fa-code"></i> Snippet 
@@ -57,27 +62,11 @@ function Header() {
                 </Nav>
             </Navbar.Collapse>
             </Container>
-            {/* modal for search */}
-            <>
-                {/* <Modal show={show} onHide={handleClose}>
-                <Modal.Header >
-                    <Modal.Title>Snippet Search</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                <InputGroup>
-                    <FormControl id="inlineFormInputGroupUsername" placeholder="search..." />
-                    <InputGroup.Text style={{background:"#343a40",color:"white"}}><i className="fas fa-search-plus"></i></InputGroup.Text>
-                </InputGroup>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" size="sm" onClick={handleClose}>Close</Button>
-                    <Button variant="primary" size="sm">Search</Button>
-                </Modal.Footer>
-                </Modal> */}
-            </>
+            
         </Navbar>
     )
 }
+
 
 
 export default Header

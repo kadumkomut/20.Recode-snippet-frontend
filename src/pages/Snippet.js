@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Categories } from '.';
-import {Container,Accordion,Badge,Card,ButtonGroup,Button, ListGroup} from 'react-bootstrap'
+import {Container,Accordion,Badge,Card,ButtonGroup,Button, ListGroup, FormControl} from 'react-bootstrap'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import '../styles/snippet.css'
@@ -53,6 +53,8 @@ function Snippet() {
     return (
         <Container fluid="sm" className="spinner__container">
 
+            <SearchInput setSnippetData={setSnippetData} setDataLoading={setDataLoading}/>
+
             <Categories />  
 
             <ListGroup style={{marginTop:"15px"}} as="ul" variant="flush">
@@ -94,11 +96,34 @@ function Snippet() {
                         </ListGroup.Item>
                     ))
                 }
-                
             </Accordion>
             </ListGroup>
         </Container>
     )
+}
+
+const SearchInput = ({setSnippetData,setDataLoading}) => {
+    const [searchValue, setSearchValue] = useState("");
+    const searchSnippet = async() =>{
+        if(searchValue==="") return;
+        setDataLoading(true);
+        await axios.post('https://recode-snippet.herokuapp.com/search',{
+            searchValue,
+            userId : localStorage.getItem('userid')
+        }).then(res=>{
+            if(res.data.message!="success"){
+                setDataLoading(false);
+                return;
+            }
+            setSnippetData(res.data.data);
+            setDataLoading(false);
+        })
+    }
+    return (<div style={{marginTop:"15px",display:"flex"}}>
+        <FormControl  value={searchValue} onChange={(e)=>setSearchValue(e.target.value)} placeholder="search by title..."/>
+        <Button onClick={searchSnippet}>Search</Button>
+        </div>
+    );
 }
 
 function useQuery() {
