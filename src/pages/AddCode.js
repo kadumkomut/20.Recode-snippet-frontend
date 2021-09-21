@@ -25,12 +25,8 @@ function AddCode() {
     const [codeAce, setCodeAce] = useState("");
     const [languageValue, setLanguageValue] = useState("");
     const [editCode, setEditCode] = useState(false);
-    const [languageList, setLanguageList] = useState(
-        ['javascript','java','html','gitignore','c_cpp','clojure','python','css','json','swift', 'elixir','erlang','kotlin']
-    );
-    const [tagsList, setTagsList] = useState(
-        ['express','django','github','algorithm','datastructure','flask','styles','php','others','react']
-    )  
+    const languageList = ['javascript','java','html','gitignore','c_cpp','clojure','python','css','json','swift', 'elixir','erlang','kotlin'];
+    const tagsList = ['express','django','github','algorithm','datastructure','flask','styles','php','others','react'];
     const history = useHistory();
     const query = useQuery();
 

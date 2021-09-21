@@ -32,13 +32,6 @@ function Snippet() {
         fetch();
     },[]);
 
-    const copyToClipboard = (value) =>{
-        navigator.clipboard.writeText(value)
-        Swal.fire({
-            title : "Copied",
-            icon: "success"
-        })
-    }
     const editSnippet = (id) =>{
         return history.push(`/addcode?id=${id}`);
     }
@@ -48,30 +41,38 @@ function Snippet() {
     return (
         <Container fluid="sm" className="spinner__container">
 
-            <SearchInput setSnippetData={setSnippetData} setDataLoading={setDataLoading}/>
+            {
+                dataLoading?<Spinner />:<>
+                <SearchInput setSnippetData={setSnippetData} setDataLoading={setDataLoading}/>
+                <Categories setSnippetData={setSnippetData} setDataLoading={setDataLoading}/>  
+                <ListGroup style={{marginTop:"15px"}} as="ul" variant="flush">
+                    <Accordion>
+                        {
+                        snippetData&&snippetData.map((value,index)=>(
+                            <CodeAccordionList key={value.id}
+                                value={value} 
+                                editSnippet={editSnippet}
+                                deleteSnippetCode={deleteSnippetCode}
+                                index={index}
+                                />
+                        ))
+                        }
+                    </Accordion>
+                </ListGroup></>
+            }
 
-            <Categories setSnippetData={setSnippetData} setDataLoading={setDataLoading}/>  
-
-            <ListGroup style={{marginTop:"15px"}} as="ul" variant="flush">
-            <Accordion>
-                {dataLoading?<Spinner/>:
-                    snippetData&&snippetData.map((value,index)=>(
-                        <CodeAccordionList key={value.id}
-                            value={value} 
-                            copyToClipboard={copyToClipboard} 
-                            editSnippet={editSnippet}
-                            deleteSnippetCode={deleteSnippetCode}
-                            index={index}
-                            />
-                    ))
-                }
-            </Accordion>
-            </ListGroup>
         </Container>
     )
 }
 
-const CodeAccordionList = ({value,copyToClipboard,editSnippet,deleteSnippetCode,index}) =>{
+const CodeAccordionList = ({value,editSnippet,deleteSnippetCode,index}) =>{
+    const copyToClipboard = (value) =>{
+        navigator.clipboard.writeText(value)
+        Swal.fire({
+            title : "Copied To Clipboard",
+            icon: "success"
+        })
+    }
     return (
             <ListGroup.Item  style={{borderBottom:'4px solid grey'}}>   
                 <Accordion.Toggle as={Card.Header} 
