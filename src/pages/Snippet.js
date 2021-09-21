@@ -129,7 +129,7 @@ const SearchInput = ({setSnippetData,setDataLoading}) => {
     }
     return (<div style={{marginTop:"15px",display:"flex"}}>
         <FormControl  value={searchValue} onChange={(e)=>setSearchValue(e.target.value)} placeholder="search by title..."/>
-        <Button onClick={searchSnippet}>Search</Button>
+        <Button variant="success" onClick={searchSnippet}>Search</Button>
         </div>
     );
 }
