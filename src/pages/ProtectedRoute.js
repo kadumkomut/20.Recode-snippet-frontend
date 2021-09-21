@@ -13,7 +13,7 @@ const ProtectedRoute = ({component:Component,...restOfProps}) =>{
         <Route
             {...restOfProps}
             render={(props) =>
-                user? <Component {...props} /> : <Redirect to="/signin" />
+                user&&localStorage.getItem('userid')? <Component {...props} /> : <Redirect to="/signin" />
             }
         />
         }

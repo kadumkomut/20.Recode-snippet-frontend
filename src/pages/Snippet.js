@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Categories } from '.';
-import {Container,Accordion,Badge,Card,ButtonGroup,Button, ListGroup, FormControl} from 'react-bootstrap'
+import {Container,Accordion,Badge,Card,ButtonGroup,Button, ListGroup, FormControl, Alert} from 'react-bootstrap'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import '../styles/snippet.css'
@@ -13,16 +13,23 @@ import Swal from 'sweetalert2';
 function Snippet() {
     const [snippetData, setSnippetData] = useState([]);
     const [dataLoading, setDataLoading] = useState(true);
+    const [zeroData, setZeroData] = useState(false);
+    const [currentTag, setCurrentTag] = useState("");
     const history = useHistory();
     useEffect(()=>{
         const fetch = async() =>{
             setDataLoading(true);
+            setZeroData(false);
+            setCurrentTag("")
             // for all
             let url = `https://recode-snippet.herokuapp.com/snippet/${localStorage.getItem('userid')}`
             await axios.get(url)
             .then(res=>{
                 setDataLoading(false)
                 setSnippetData(res.data);
+                if(res.data.length<1){
+                    setZeroData(true);
+                }
             })
             .catch(err=>{
                 setDataLoading(false);
@@ -43,13 +50,13 @@ function Snippet() {
 
             {
                 dataLoading?<Spinner />:<>
-                <SearchInput setSnippetData={setSnippetData} setDataLoading={setDataLoading}/>
-                <Categories setSnippetData={setSnippetData} setDataLoading={setDataLoading}/>  
+                <SearchInput setSnippetData={setSnippetData} setZeroData={setZeroData} setCurrentTag={setCurrentTag} setDataLoading={setDataLoading}/>
+                <Categories setSnippetData={setSnippetData} currentTag={currentTag} setCurrentTag={setCurrentTag} setZeroData={setZeroData} setDataLoading={setDataLoading}/>  
                 <ListGroup style={{marginTop:"15px"}} as="ul" variant="flush">
                     <Accordion>
                         {
                         snippetData&&snippetData.map((value,index)=>(
-                            <CodeAccordionList key={value.id}
+                            <CodeAccordionList key={value._id}
                                 value={value} 
                                 editSnippet={editSnippet}
                                 deleteSnippetCode={deleteSnippetCode}
@@ -58,7 +65,9 @@ function Snippet() {
                         ))
                         }
                     </Accordion>
-                </ListGroup></>
+                </ListGroup>
+                {zeroData&&<Alert variant="danger"><center>No Snippet Present!</center></Alert>}
+                </>
             }
 
         </Container>
@@ -110,11 +119,13 @@ const CodeAccordionList = ({value,editSnippet,deleteSnippetCode,index}) =>{
     );
 }
 
-const SearchInput = ({setSnippetData,setDataLoading}) => {
+const SearchInput = ({setSnippetData,setDataLoading,setZeroData,setCurrentTag}) => {
     const [searchValue, setSearchValue] = useState("");
     const searchSnippet = async() =>{
         if(searchValue==="") return;
+        setZeroData(false);
         setDataLoading(true);
+        setCurrentTag("")
         await axios.post('https://recode-snippet.herokuapp.com/search',{
             searchValue,
             userId : localStorage.getItem('userid')
@@ -125,6 +136,12 @@ const SearchInput = ({setSnippetData,setDataLoading}) => {
             }
             setSnippetData(res.data.data);
             setDataLoading(false);
+            if(res.data.data.length<1){
+                setZeroData(true);
+            }
+        }).catch(err=>{
+            setDataLoading(false);
+            console.log(err);
         })
     }
     return (<div style={{marginTop:"15px",display:"flex"}}>

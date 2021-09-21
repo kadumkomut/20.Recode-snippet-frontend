@@ -1,16 +1,20 @@
 import {Card,Badge} from 'react-bootstrap'
-import {useState} from 'react';
 import axios from 'axios';
 
-function Categories({setSnippetData,setDataLoading}) {
+function Categories({setSnippetData,setDataLoading,setZeroData,setCurrentTag,currentTag}) {
     const tagsList = ['express','django','github','algorithm','datastructure','flask','styles','php','others','react'];
     const searchTags = async(tags) =>{
         setDataLoading(true);
+        setZeroData(false);
         const url = `https://recode-snippet.herokuapp.com/snippet/${localStorage.getItem('userid')}/search/${tags}`
         await axios.get(url)
             .then(res=>{
                 setDataLoading(false)
                 setSnippetData(res.data);
+                setCurrentTag(tags);
+                if(res.data.length<1){
+                    setZeroData(true);
+                }
             })
             .catch(err=>{
                 setDataLoading(false);
@@ -22,7 +26,7 @@ function Categories({setSnippetData,setDataLoading}) {
             <Card.Body>
                 <span style={{color:"grey"}}>Search by tags : </span>&nbsp;
                 {tagsList.map((value,index)=>(
-                    <Badge onClick={()=>searchTags(value)} key={index} className="spinner__badge" >{value}</Badge>
+                    <Badge onClick={()=>searchTags(value)} key={index} className={`spinner__badge ${currentTag==value?"spinner__active":null}`} >{value}</Badge>
                 ))}
             </Card.Body>
         </Card>
