@@ -4,7 +4,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { NavLink,useHistory } from 'react-router-dom';
 import { signOut } from '../authentication';
 import { FirebaseContext } from '../firebase'
-import brain from '../images/brain.png'
 import '../styles/header.css'
 
 function Header() {
@@ -16,7 +15,7 @@ function Header() {
             <Container>
             <Navbar.Brand>
                 <NavLink  activeStyle={{color:"white"}} className="active d-flex" to="/">
-                    <img src={brain} alt="recode snippet icon" style={{width:"30px",height:"30px"}}/> &nbsp;Recode Snippet
+                    <img src={process.env.PUBLIC_URL + '/brain.png'} alt="recode snippet icon" style={{width:"30px",height:"30px"}}/> &nbsp;Recode Snippet
                 </NavLink>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
